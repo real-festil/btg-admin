@@ -11,7 +11,7 @@ import { useMediaQuery } from 'react-responsive'
 import firebase from "firebase";
 import dynamic from 'next/dynamic'
 import Skeleton, { SkeletonTheme }  from 'react-loading-skeleton';
-import matchSorter from 'match-sorter'
+import { matchSorter } from 'match-sorter'
 import Dropdown from 'react-bootstrap/esm/Dropdown';
 import Modal from 'react-bootstrap/esm/Modal';
 import Button from 'react-bootstrap/esm/Button';

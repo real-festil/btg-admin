@@ -15,11 +15,12 @@ function MyApp({ Component, pageProps }: AppProps) {
     appId: "1:74892996588:web:53d3567d0aed858c2a1ac9"
   };
 
-  try {
+  if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
-  } catch(err){
-      console.error('Firebase initialization error', err);
+  } else {
+      firebase.app();
   }
+
   return (
     <>
       <Component {...pageProps} />
