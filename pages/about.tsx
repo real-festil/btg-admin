@@ -5,7 +5,7 @@ import Layout from '../components/Layout';
 export default function Home() {
   return (
     <div className={styles.container}>
-      <Head>
+      {/* <Head>
         <title>Observer VC | About</title>
         <meta name="description" content="Observer uses data from Google’s Pagespeed Insights API to get performance metrics for venture fund websites" />
         <link rel="icon" href="/favicon.ico" />
@@ -24,7 +24,7 @@ export default function Home() {
         <h1 className={styles.title}>About Observer</h1>
         <p className={styles.text} style={{marginBottom: '60px'}}>List of all VC websites and names is provided by OpenVC.
         </p>
-      </Layout>
+      </Layout> */}
     </div>
   )
 }

@@ -6,42 +6,52 @@ import firebase from 'firebase';
 import moment from 'moment';
 import dynamic from 'next/dynamic'
 import Skeleton, { SkeletonTheme }  from 'react-loading-skeleton';
+import tableStyles from '../components/Table/Table.module.scss';
+const Button = dynamic(import('react-bootstrap/esm/Button'), {ssr: false})
 
 const Table = dynamic(() => import('../components/Table'));
 
 export default function Home() {
-  const [lastUpdated, setLastUpdated] = useState(null as any);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  useEffect(() => {
-    const dbRef = firebase.database().ref();
-    dbRef.child("lastUpdated").get().then((snapshot) => {
-      if (snapshot.exists()) {
-        setLastUpdated(snapshot.val());
-      } else {
-        console.log("No data available");
-      }
-    }).catch((error) => {
-      console.error(error);
-    });
-  }, []);
+  const onLogin = () => {
+    if (email === 'bilotil.sergiy@gmail.com') {
+      firebase.auth().signInWithEmailAndPassword(email, password).then().catch((err) => {alert(err)});
+    } else {
+      alert('Invalid email')
+    }
+  }
+
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+      setIsLoggedIn(true);
+    }
+  })
 
   return (
     <div className={styles.container}>
       <Head>
-        <title>Observer VC | Main</title>
-        <meta name="description" content="We promote Web Vitals metrics in VC and startup markets" />
+        <title>BTG Admin Panel</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Layout>
-          <h1 className={styles.title}>Top VCs by website performance</h1>
-          <p className={styles.subtitle}>
-            {lastUpdated ?
-              `Last updated: ${moment(lastUpdated).format('D MMMM YYYY')}` :
-              <SkeletonTheme color="#13242d" highlightColor="#376882">
-                <Skeleton />
-              </SkeletonTheme>}
-            </p>
-        <Table/>
+      <Layout isLoggedIn={isLoggedIn} onLogOut={() => {firebase.auth().signOut(); setIsLoggedIn(false)}}>
+        {isLoggedIn ? (
+            <Table/>
+          ) : (
+            <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column', paddingTop: '20px'}}>
+              <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column', marginBottom: '20px'}}>
+                <p style={{margin: 0}}>Email:</p>
+                <input type="email" placeholder="Email" onChange={(e) => setEmail(e.target.value)} className={tableStyles.searchInput}/>
+              </div>
+              <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column'}}>
+                <p style={{margin: 0}}>Password:</p>
+                <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} className={tableStyles.searchInput}/>
+              </div>
+              <Button onClick={onLogin} variant="primary" style={{backgroundColor: 'rgba(208, 217, 222, 0.1)', outline: 'none', border: 'none', marginTop: '20px'}}>Submit</Button>
+            </div>
+          )}
       </Layout>
     </div>
   )

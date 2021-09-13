@@ -5,14 +5,14 @@ import styles from './Layout.module.scss';
 
 const Footer = dynamic(() => import('../Footer'))
 
-const Layout = ({children}: {children: React.ReactNode}) => {
+const Layout = ({children, onLogOut, isLoggedIn}: {children: React.ReactNode, onLogOut?: () => void, isLoggedIn?: boolean}) => {
   return (
     <section className={styles.layout}>
-      <Header />
+      <Header onLogOut={() => onLogOut && onLogOut()} isLoggedIn={isLoggedIn}/>
       <div className={styles.container}>
         {children}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </section>
   )
 }
