@@ -12,9 +12,7 @@ import firebase from "firebase";
 import dynamic from 'next/dynamic'
 import Skeleton, { SkeletonTheme }  from 'react-loading-skeleton';
 import { matchSorter } from 'match-sorter'
-import Dropdown from 'react-bootstrap/esm/Dropdown';
-import Modal from 'react-bootstrap/esm/Modal';
-import Button from 'react-bootstrap/esm/Button';
+import {Dropdown, Modal, Button} from 'react-bootstrap';
 import moment from 'moment';
 
 const ReactPaginate = dynamic(() => import('react-paginate'))
@@ -603,4 +601,6 @@ const Table = () => {
   )
 }
 
-export default Table;
+export default dynamic(() => Promise.resolve(Table), {
+  ssr: false
+})

@@ -3,9 +3,7 @@ import styles from '../styles/Home.module.scss';
 import Layout from '../components/Layout';
 import React, {useState, useEffect} from 'react';
 import firebase from 'firebase';
-import moment from 'moment';
 import dynamic from 'next/dynamic'
-import Skeleton, { SkeletonTheme }  from 'react-loading-skeleton';
 import tableStyles from '../components/Table/Table.module.scss';
 const Button = dynamic(import('react-bootstrap/esm/Button'), {ssr: false})
 
@@ -15,6 +13,7 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
 
   const onLogin = () => {
     if (email === 'bilotil.sergiy@gmail.com') {
@@ -27,6 +26,9 @@ export default function Home() {
   firebase.auth().onAuthStateChanged((user) => {
     if (user) {
       setIsLoggedIn(true);
+      setIsLoading(false);
+    } else {
+      setIsLoading(false);
     }
   })
 
@@ -37,7 +39,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Layout isLoggedIn={isLoggedIn} onLogOut={() => {firebase.auth().signOut(); setIsLoggedIn(false)}}>
-        {isLoggedIn ? (
+        {!isLoading && (isLoggedIn ? (
             <Table/>
           ) : (
             <div style={{display: 'flex', alignItems: 'center', flexDirection: 'column', paddingTop: '20px'}}>
@@ -51,7 +53,7 @@ export default function Home() {
               </div>
               <Button onClick={onLogin} variant="primary" style={{backgroundColor: 'rgba(208, 217, 222, 0.1)', outline: 'none', border: 'none', marginTop: '20px'}}>Submit</Button>
             </div>
-          )}
+        ))}
       </Layout>
     </div>
   )
