@@ -250,6 +250,8 @@ const Table = () => {
   const [selectedRow, setSelectedRow] = React.useState({});
   const [selectedStatus, setSelectedStatus] = React.useState();
 
+  console.log(`data`, data)
+
   React.useEffect(() => {
     ReactTooltip.rebuild();
     const dbRef = firebase.database().ref();
@@ -301,6 +303,7 @@ const Table = () => {
           equipName: Object.entries(equipments).map((user) => user[1]).filter(eq => eq.id === equip.id)[0]['name'],
           equipStatus: equip.status,
           equipId: equip.id,
+          address: user.address,
           equipCreatedAt: equip.createdAt,
           equipExpiredAt: equip.expiredAt,
           equipDuration: Object.entries(equipments).map((user) => user[1]).filter(eq => eq.id === equip.id)[0]['duration'],
@@ -568,6 +571,8 @@ const Table = () => {
               <p>Price: ${selectedRow.equipPrice}</p>
               <p>Weight: {selectedRow.equipWeight}</p>
               <p>From: {moment(selectedRow.equipCreatedAt).format('DD/MM/YYYY')}</p>
+              <p>Address: {selectedRow.address  || 'User has no address'}</p>
+              {selectedRow.equipExpiredAt && (<p>Total Months Duration: {moment(selectedRow.equipExpiredAt).diff(moment(selectedRow.equipCreatedAt), 'months', false)}</p>)}
             </div>
             <div>
               <p>Equipment Id: {selectedRow.equipId}</p>
